@@ -11,6 +11,38 @@
     ><br />
     <h3 v-if="result == Infinity" style="color: red">На ноль делить нельзя</h3>
     <h3 v-else>{{ result }}</h3>
+    <br />
+    <br />
+    <input type="checkbox" id="checkbox" v-model="toggle" />
+    <label for="checkbox">Отобразить экранную клавиатуру</label>
+    <br />
+    <div v-show="toggle">
+      <button
+        v-for="number in 10"
+        :key="number.index"
+        @click="getValue(number - 1)"
+      >
+        {{ number - 1 }}
+      </button>
+      <button @click="delValue()">&#129040;</button>
+      <br />
+      <input
+        type="radio"
+        id="operand1"
+        name="radio"
+        v-model="picked"
+        v-bind:value="operand1"
+      />
+      <label for="operand1">Операнд 1</label>
+      <input
+        type="radio"
+        id="operand2"
+        name="radio"
+        v-model="picked"
+        v-bind:value="operand2"
+      />
+      <label for="operand2">Операнд 2</label>
+    </div>
   </div>
 </template>
 
@@ -25,7 +57,27 @@ export default {
       operand1: "",
       operand2: "",
       result: 0,
+      toggle: "",
+      picked: "",
     };
+  },
+  // const key = Date.now()
+  // Vue.$set(this.value, indexOfItem, getValue()),
+  methods: {
+    getValue(item) {
+      if (this.picked == this.operand1) {
+        this.operand1 += item.toString();
+      } else if (this.picked == this.operand2) {
+        this.operand2 += item.toString();
+      }
+    },
+    delValue() {
+      if (this.picked == this.operand1) {
+        this.operand1 = this.operand1.substring(0, this.operand1.length - 1);
+      } else if (this.picked == this.operand2) {
+        this.operand2 = this.operand2.substring(0, this.operand2.length - 1);
+      }
+    },
   },
 };
 </script>
