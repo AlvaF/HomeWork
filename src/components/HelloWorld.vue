@@ -1,85 +1,54 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <input v-model="operand1" /> <br />
-    <input v-model="operand2" /> <br />
-    <button v-on:click="result = +operand1 + +operand2">+</button>
-    <button v-on:click="result = operand1 - operand2">-</button>
-    <button @click="result = Math.round(operand1 / operand2)">/</button>
-    <button @click="result = operand1 * operand2">*</button>
-    <button @click="result = Math.pow(operand1, operand2)">Степень</button
-    ><br />
-    <h3 v-if="result == Infinity" style="color: red">На ноль делить нельзя</h3>
-    <h3 v-else>{{ result }}</h3>
-    <br />
-    <br />
-    <input type="checkbox" id="checkbox" v-model="toggle" />
-    <label for="checkbox">Отобразить экранную клавиатуру</label>
-    <br />
-    <div v-show="toggle">
-      <button
-        v-for="number in 10"
-        :key="number.index"
-        @click="getValue(number - 1)"
-      >
-        {{ number - 1 }}
-      </button>
-      <button @click="delValue()">&#129040;</button>
-      <br />
-      <input
-        type="radio"
-        id="operand1"
-        name="radio"
-        v-model="picked"
-        v-bind:value="operand1"
-      />
-      <label for="operand1">Операнд 1</label>
-      <input
-        type="radio"
-        id="operand2"
-        name="radio"
-        v-model="picked"
-        v-bind:value="operand2"
-      />
-      <label for="operand2">Операнд 2</label>
-    </div>
   </div>
+ 
 </template>
 
 <script>
+// import AddPaymentForm from "@/components/AddPaymentForm.vue";
+// import PaymentsDisplay from "@/components/PaymentsDisplay.vue";
 export default {
-  name: "HelloWorld",
+  name: 'HelloWorld',
   props: {
-    msg: String,
+    msg: String
   },
-  data() {
-    return {
-      operand1: "",
-      operand2: "",
-      result: 0,
-      toggle: "",
-      picked: "",
-    };
-  },
-  // const key = Date.now()
-  // Vue.$set(this.value, indexOfItem, getValue()),
-  methods: {
-    getValue(item) {
-      if (this.picked == this.operand1) {
-        this.operand1 += item.toString();
-      } else if (this.picked == this.operand2) {
-        this.operand2 += item.toString();
-      }
-    },
-    delValue() {
-      if (this.picked == this.operand1) {
-        this.operand1 = this.operand1.substring(0, this.operand1.length - 1);
-      } else if (this.picked == this.operand2) {
-        this.operand2 = this.operand2.substring(0, this.operand2.length - 1);
-      }
-    },
-  },
-};
+  // components: {
+  //   PaymentsDisplay,
+  //   AddPaymentForm
+  // },
+  // data() {
+  //   return {
+  //     paymentsList: [],
+  //   };
+  // },
+  // methods: {
+  //   addPayment(data){
+  //     this.paymentsList.push(data)
+  //   },
+  //   fetchData() {
+  //     return [
+  //       {
+  //         date: "28.03.2020",
+  //         category: "Food",
+  //         value: 169,
+  //       },
+  //       {
+  //         date: "24.03.2020",
+  //         category: "Transport",
+  //         value: 360,
+  //       },
+  //       {
+  //         date: "24.03.2020",
+  //         category: "Food",
+  //         value: 532,
+  //       },
+  //     ];
+  //   },
+  //   created() {
+  //     this.paymentsList = this.fetchData();
+  //   },
+  // },
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -97,12 +66,5 @@ li {
 }
 a {
   color: #42b983;
-}
-input {
-  margin-bottom: 10px;
-}
-button {
-  margin-right: 2px;
-  color: #124b31;
 }
 </style>

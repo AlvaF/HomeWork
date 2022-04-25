@@ -1,4 +1,4 @@
-# first-project
+# new-project
 
 ## Project setup
 ```
