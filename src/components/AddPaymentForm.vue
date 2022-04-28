@@ -1,9 +1,13 @@
 <template>
   <div class="form">
-    
-      <input v-model="amount" placeholder="Payment amount" /> <br />
-      <input v-model="type" placeholder="Payment type" /><br />
-      <input v-model="date" placeholder="Payment date" /><br />
+    <select v-model="amount" v-if="categoryList">
+      <option v-for="(value, index) in categoryList" :key="index">
+        {{ value }}
+      </option>
+    </select>
+    <br />
+    <input v-model="type" placeholder="Payment type" /><br />
+    <input v-model="date" placeholder="Payment date" /><br />
     <button @click="OnClickSave()">Add</button>
   </div>
 </template>
@@ -25,6 +29,9 @@ export default {
       const year = today.getFullYear();
       return `${day}.0${month}.${year}`;
     },
+    categoryList() {
+      return this.$store.getters.getCategoryList;
+    },
   },
   methods: {
     OnClickSave() {
@@ -33,13 +40,15 @@ export default {
         type: this.type,
         date: this.date || this.getCurrentDate,
       };
-      this.$emit("addNewPayment", data);
-      console.log(data)
+      this.$store.commit("addDataToPaymentList", data);
+      // this.$emit("addNewPayment", data);
+      console.log(data);
     },
+  },
+  created() {
+    this.$store.dispatch("fetchCategoryList");
   },
 };
 </script>
 <style lang="scss">
-
-  
 </style>

@@ -5,59 +5,89 @@
     </header>
     <main>
       <button @click="clicked()">ADD NEW COST+</button>
-
+      <AddCategoryFormButton />
       <AddPaymentForm @addNewPayment="addPayment()" v-show="toggle" />
-      <PaymentsDisplay :items="paymentsList" />
+      <PaymentsDisplay :items="currentElements" />
+      <MyPagination
+        :current="current"
+        :length="6"
+        :n="n"
+        @changePage="changePage"
+      />
     </main>
   </div>
 </template>
 <script>
 import AddPaymentForm from "@/components/AddPaymentForm.vue";
 import PaymentsDisplay from "@/components/PaymentsDisplay.vue";
+import MyPagination from "@/components/MyPagination.vue";
+import AddCategoryFormButton from "@/components/AddCategoryFormButton.vue";
+import { mapMutations } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   name: "App",
   components: {
     PaymentsDisplay,
     AddPaymentForm,
+    MyPagination,
+    AddCategoryFormButton,
   },
   data() {
     return {
-      paymentsList: [],
+      // paymentsList: [],
+      current: 1,
+      n: 3,
       toggle: false,
     };
   },
-
+  computed: {
+    ...mapGetters(["getPaymentList"]),
+    currentElements() {
+      return this.getPaymentList.slice(
+        this.n * (this.current - 1),
+        this.n * (this.current - 1) + this.n
+      );
+    },
+  },
   methods: {
+    ...mapMutations(["setPaymentsListData"]),
     addPayment(data) {
       this.paymentsList.push(data);
       // this.paymentsList = [...this.paymentsList, data];
       console.log(data);
     },
-    fetchData() {
-      return [
-        {
-          date: "28.03.2020",
-          type: "Food",
-          amount: 169,
-        },
-        {
-          date: "24.03.2020",
-          type: "Transport",
-          amount: 360,
-        },
-        {
-          date: "24.03.2020",
-          type: "Food",
-          amount: 532,
-        },
-      ];
-    },
-    created() {
-      this.paymentsList = this.fetchData();
-    },
+    // fetchData() {
+    //   return [
+    //     {
+    //       date: "28.03.2020",
+    //       category: "Food",
+    //       value: 169,
+    //     },
+    //     {
+    //       date: "24.03.2020",
+    //       category: "Transport",
+    //       value: 360,
+    //     },
+    //     {
+    //       date: "24.03.2020",
+    //       category: "Food",
+    //       value: 532,
+    //     },
+    //   ];
+    // },
     clicked() {
       this.toggle = !this.toggle;
     },
+    changePage(p) {
+      this.current = p;
+      this.$store.dispatch("fetchData", p);
+    },
+  },
+  created() {
+    // this.paymentsList = this.fetchData();
+    // this.$store.commit("setPaymentsListData", this.fetchData());
+    // this.setPaymentListData(this.fetchData())
+    this.$store.dispatch("fetchData", this.current);
   },
 };
 </script>
