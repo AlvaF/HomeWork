@@ -16,7 +16,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style >
 .PaymentList {
   display: flex;
   flex-direction: column;

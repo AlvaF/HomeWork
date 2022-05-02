@@ -1,7 +1,12 @@
 <template>
   <div class="form">
-    <input v-model="amount" placeholder="Payment amount" /> <br />
-    <input v-model="type" placeholder="Payment type" /><br />
+    <select v-model="category" v-if="categoryList">
+      <option v-for="(value, index) in categoryList" :key="index">
+        {{ value }}
+      </option>
+    </select>
+    <br />
+    <input v-model.number="value" placeholder="Payment value" /><br />
     <input v-model="date" placeholder="Payment date" /><br />
     <button @click="OnClickSave()">Add</button>
   </div>
@@ -11,9 +16,9 @@ export default {
   name: "AddPaymentForm",
   data() {
     return {
-      amount: "",
-      type: "",
       date: "",
+      category: "",
+      value: "",
     };
   },
   computed: {
@@ -24,24 +29,39 @@ export default {
       const year = today.getFullYear();
       return `${day}.0${month}.${year}`;
     },
+    categoryList() {
+      return this.$store.getters.getCategoryList;
+    },
   },
   methods: {
     OnClickSave() {
       const data = {
-        amount: this.amount,
-        type: this.type,
         date: this.date || this.getCurrentDate,
+        category: this.category,
+        value: this.value,
       };
-      this.$emit("addNewPayment", data);
+      this.$store.commit("addDataToPaymentList", data);
+      // this.$emit("addNewPayment", data);
       console.log(data);
     },
+  },
+  created() {
+    this.$store.dispatch("fetchCategoryList");
+  },
+  mounted() {
+    const { category, section } = this.$route.params;
+    if (!category || !section) {
+      return;
+    }
+    this.category = category;
+    const { value } = this.$route.query;
+    if (!value) return;
+    this.value = value;
+    if (this.value && this.category) {
+      this.OnClickSave();
+    }
   },
 };
 </script>
 <style lang="scss">
-button {
-  background-color: rgb(12, 136, 145);
-  color: white;
-  border: none;
-}
 </style>
